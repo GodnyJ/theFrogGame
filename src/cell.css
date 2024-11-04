@@ -21,6 +21,11 @@
     background-color: green;
 }
 
-.jumpOption {
-    background-color: red; /* kolor dla dostępnych pól do skoku */
-  }
+/* .jumpOption {
+    background-color: blue;
+} */
+
+.cell.disabled {
+    background-color: #C3CED1;
+    pointer-events: none;
+}

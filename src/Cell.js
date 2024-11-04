@@ -21,6 +21,15 @@ const initialFrogs = [
       thickness: "slim",
     },
   },
+  {
+    x: 3,
+    y: 1,
+    frog: {
+      gender: "female",
+      height: "tall",
+      thickness: "slim",
+    },
+  },
 ];
 
 export default function Cell({ rows, cols }) {
@@ -87,7 +96,7 @@ const [cells, setCells] = useState(
         { x: x - jumpDistance, y: y } // w lewo
     );
 
-    console.log(cols);
+    // console.log(cols);
 
     // Filtrowanie, aby sprawdzić, czy skok mieści się w granicach planszy
     return options.filter(
@@ -102,7 +111,7 @@ const handleCellClick = (cell) => {
 
     if (source === null) {
         if (cell.frog === null) {
-            console.log("Kliknięto pustą komórkę, nie ma żaby");
+            console.log("Kliknięto pustą komórkę, musisz kliknąć żabę");
             return;
         }
 
@@ -131,25 +140,55 @@ const handleCellClick = (cell) => {
         }
     }
 };
+console.log({source});
+console.log({target});
 
-console.log(cells);
+//nowa pozycja żaby
+const setNewCellOfFrog = () => {
+    setCells((oldCells) => 
+        oldCells.map((cell) => {
+            //jeśli komórka jest źródłem (source) tp ustawiam ją jako pustą
+            if (cell.x === source?.x && cell.y === source?.y) {
+                return { ...cell, frog: null };
+            }
+            //jeśli komórka jest celem (target) to przenoszę do niej żabę i ustawiam nowe współrzędne
+            if (cell.x === target?.x && cell.y === target?.y) {
+                return { ...cell, frog: source?.frog, x: target.x, y: target.y };
+            }
+            return cell;
+        })
+    )
+
+    setSource(null);
+    setTarget(null);
+    setJumpOptions([]);
+}
+
+// console.log(cells);
   return (
-    <div className="siatkaTest">
-      {cells.map((cell) => (
-        <div
-          key={cell.id}
-          className={classNames({
-            cell: true,
-            checked: cell === source || cell === target,
-            frog: cell.frog !== null,
-            jumpOption: jumpOptions.some((option) => option.x === cell.x && option.y === cell.y),
-        })}
-          onClick={() => handleCellClick(cell)} 
-        >
-            <p>x: {cell.x}</p>
-            <p>y: {cell.y}</p>
+    <div>
+        <div className="siatkaTest">
+            {cells.map((cell) => (
+            <div
+                key={cell.id}
+                className={classNames({
+                cell: true,
+                checked: cell === source || cell === target,
+                frog: cell.frog !== null,
+                jumpOption: jumpOptions.some((option) => option.x === cell.x && option.y === cell.y),
+                disabled: source !== null && cell.frog === null && !jumpOptions.some((option) => option.x === cell.x && option.y ===cell.y) && cell !== source,
+            })}
+                onClick={() => handleCellClick(cell)} 
+            >
+                <p>x: {cell.x}</p>
+                <p>y: {cell.y}</p>
+            </div>
+            ))}
         </div>
-      ))}
+        <div>
+        <button onClick={setNewCellOfFrog}>Jump</button>
+        <button>Reproduce</button>
+        </div>
     </div>
   );
 }
