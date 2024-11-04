@@ -20,3 +20,7 @@
 .frog {
     background-color: green;
 }
+
+.jumpOption {
+    background-color: red; /* kolor dla dostępnych pól do skoku */
+  }
