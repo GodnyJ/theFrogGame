@@ -1,0 +1,22 @@
+.siatkaTest {
+    display: grid; 
+    grid-template-columns: repeat(10, 80px); 
+    grid-gap: 5px;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+.cell {
+    width: 80px;
+    height: 80px;
+    background-color: lightblue;
+    border: 1px solid #ddd;
+}
+
+.checked {
+    border: 2px solid black;
+}
+
+.frog {
+    background-color: green;
+}
