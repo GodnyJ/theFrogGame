@@ -5,19 +5,19 @@ import Frog from "./Frog";
 
 const initialFrogs = [
   {
-    x: 5,
-    y: 3,
+    x: 0,
+    y: 0,
     frog: {
-      gender: "male",
+      gender: "female",
       height: "tall",
       thickness: "slim",
     },
   },
   {
-    x: 1,
+    x: 0,
     y: 1,
     frog: {
-      gender: "female",
+      gender: "male",
       height: "short",
       thickness: "fat",
     },
@@ -75,25 +75,81 @@ export default function Cell({ rows, cols }) {
   const canJump = source?.frog !== null && target?.frog === null;
   const canReproduce = !!source?.frog && !!target?.frog; // tu zmienić że musi być male i female, mam żabę na jednej i drugiej pozycji
 
+  // const maleJumpCoordinates = [
+  //   { dx: 3, dy: 0 },  // w prawo
+  //   { dx: -3, dy: 0 }, // w lewo
+  //   { dx: 0, dy: 3 },  // w dół
+  //   { dx: 0, dy: -3 }, // w górę
+  //   { dx: 3, dy: 3 },  // po skosie w prawo w dół
+  //   { dx: 3, dy: -3 }, // po skosie w prawo w górę
+  //   { dx: -3, dy: 3 }, // po skosie w lewo w dół
+  //   { dx: -3, dy: -3 } // po skosie w lewo w górę
+  // ];
+
+  // const femaleJumCoordinates = [
+  //   { dx: 2, dy: 0 },
+  //   { dx: -2, dy: 0 },
+  //   { dx: 0, dy: 2 },
+  //   { dx: 0, dy: -2 },
+  //   { dx: 2, dy: 2 },
+  //   { dx: 2, dy: -2 },
+  //   { dx: -2, dy: 2 },
+  //   { dx: -2, dy: -2 }
+  // ];
+
+  // const cellsAroundMotherCoordinates = [
+  //   { dx: 1, dy: 0 },  // prawa
+  //   { dx: 1, dy: 1 },  // prawy dolny
+  //   { dx: 0, dy: 1 },  // dół
+  //   { dx: -1, dy: 1 }, // lewy dolny
+  //   { dx: -1, dy: 0 }, // lewa
+  //   { dx: -1, dy: -1 }, // lewy górny
+  //   { dx: 0, dy: -1 },  // góra
+  //   { dx: 1, dy: -1 }   // prawy górny
+  // ]
+
+  // const getOptions = (cell, rows, cols, cells, coordinates) => {
+  //   const options = [];
+
+  //   //czy żaba istnieje w tej komórce
+  //   if (cell.frog === null) {
+  //     return [];
+  //   }
+
+  //   //pozycja startowa żaby
+  //   const { x, y } = cell;
+
+  //   coordinates.forEach(({ dx, dy }) => {
+  //     const newX = x + dx;
+  //     const newY = y + dy;
+
+  //     //czy nowe wsp są w granicach planszy
+  //     if (newX >= 0 && newX < cols && newY >= 0 && newY < rows) {
+  //       const targetCell = cells.find((c) => c.x === newX && c.y === newY);
 
 
-  const getOptions = (avaliableCells,) => {
-    const options = [];
-
-    options.push(avaliableCells)
+  //     }
+  //   })
 
 
-  }
+  //   options.push(avaliableCells)
+
+
+  // }
+
+  const getValidCoortinates = (x, y, rows, cols) => {
+    return x >= 0 && x < cols && y >= 0 && y < rows;
+  };
 
   //opcje do narodzin nowej zaby
-  const getBirthOption = (cell, rows, cols) => {
-    console.log("Wywołanie getBirthOption dla komórki:", cell);
+  const getCellsAroundMother = (cell, rows, cols) => {
+    console.log("Wywołanie getCellsAroundMother dla komórki:", cell);
     const birthOptions = [];
+    const adjacentFrogs = [];
+    // let validCoordinates = [];
 
     if (cell.frog && cell.frog.gender === "female") {
       console.log("jest kobieta");
-      //sprawdź które komórki o 1 obok mają frog null i dodaj je do tablicy birthOptions
-      //dla female na pozycji x:3y:1 komórki dookoła, które muszę sprawdzić to x4y1, x4y2, x3y2, x2y2, x2y1, x2y0, x3y0, x4y0
 
       const neighbors = [
         { x: cell.x + 1, y: cell.y }, //prawa
@@ -106,95 +162,110 @@ export default function Cell({ rows, cols }) {
         { x: cell.x + 1, y: cell.y - 1 }, // prawy górny
       ];
 
+      //sąsiadujące współrzędne, aby znaleźć tylko te w granicach planszy
+      // validCoordinates = neighbors.filter(({ x, y }) => x >= 0 && x < cols && y >= 0 && y < rows);
+
       //które są w granicach i maja frog null
       neighbors.forEach(({ x, y }) => {
-        if (x >= 0 && x < cols && y >= 0 && y < rows) {
+        if (x >= 0 && x < cols && y >= 0 && y < rows) { //to ja tu sobie moge jedynie dać getValidCoordinates
           const neighborCell = cells.find((c) => c.x === x && c.y === y);
           if (neighborCell && neighborCell.frog === null) {
             birthOptions.push(neighborCell);
+          } if (neighborCell && neighborCell.frog) {
+           adjacentFrogs.push(neighborCell)
           }
         }
       });
     }
     console.log("Dostępne opcjie narodzin", birthOptions);
-    return birthOptions;
+    return { birthOptions, adjacentFrogs };
+    // return validCoordinates;
   };
 
 
   // console.log(canReproduce);
-  const handleReproduce = () => {
-    if (source === null || target === null) {
-      return;
-    }
+  const handleReproduce = (cells) => {
+  if (source === null || target === null) {
+    return;
+  }
 
     if (
       (source.frog.gender === "female" && target.frog.gender === "male") ||
       (source.frog.gender === "male" && target.frog.gender === "female")
     ) {
-      //określenie komórki
+      // Określenie komórki matki
       const motherCell = source.frog.gender === "female" ? source : target;
       const fatherCell = source.frog.gender === "male" ? source : target;
 
-      //określenie rodziców
-      const motherFrog = motherCell.frog;
-      const fatherFrog = fatherCell.frog;
+    // Pobranie aktualnych sąsiadujących komórek wokół matki, w tym żab
+      const { birthOptions, adjacentFrogs } = getCellsAroundMother(motherCell, rows, cols, cells);
 
-      //losowanie płci
-      const randomGender = Math.random() < 0.5 ? "male" : "female";
-
-      //szukam wolnych miejsc wokół matki
-      const birthOptions = getBirthOption(motherCell, rows, cols);
-
-      //jeśli jest wolne miejsce, biorę pierwsze z listy i dodaję tam nową żabę
-      if (birthOptions.length > 0) {
-        const newFrogCell = birthOptions[0];
-
-        //dziedziczenie height
-        const childHeight =
-          motherFrog.height === fatherFrog.height
-            ? motherFrog.height //jeśli rodzice mają takie samo height
-            : Math.random() < 0.5
-            ? motherFrog.height
-            : fatherFrog.height; //jeśli mają różne
-
-        //dziedziczenie thickness
-        const childThickness =
-          motherFrog.thickness === fatherFrog.thickness
-            ? motherFrog.thickness
-            : Math.random() < 0.5
-            ? motherFrog.thickness
-            : fatherFrog.thickness;
-
-        //aktualizacja stanu żab
-        setCells((oldCells) =>
-          oldCells.map((cell) =>
-            cell.x === newFrogCell.x && cell.y === newFrogCell.y
-              ? {
-                  ...cell,
-                  frog: {
-                    gender: randomGender,
-                    height: childHeight,
-                    thickness: childThickness,
-                  },
-                }
-              : cell
-          )
-        );
-
-        console.log("Nowa żaba w komórce:", newFrogCell);
-      } else {
-        console.log("Brak wolnych miejsc wokół matki");
-      }
-    } else {
-      console.log(
-        "Reprodukcja jest możliwa tylko pomiędzy męską a żeńską żabą :)"
-      );
+    // Sprawdzenie, czy target jest jednym z aktualnych sąsiadów
+    const isTargetAdjacent = adjacentFrogs.some(
+      (frogCell) => (frogCell.x === target.x && frogCell.y === target.y) || (frogCell.x === source.x && frogCell.y === source.y)
+    );
+    console.log(adjacentFrogs)
+    if (!isTargetAdjacent) {
+      console.log("Target nie jest w sąsiedztwie matki i nie może być wybrany.");
+      return;
     }
 
-    setSource(null);
-    setTarget(null);
-    setJumpOptions([]);
-  };
+    // Określenie rodziców
+    const motherFrog = motherCell.frog;
+    const fatherFrog = fatherCell.frog;
+
+    // Losowanie płci dla nowej żaby
+    const randomGender = Math.random() < 0.5 ? "male" : "female";
+
+    // Jeśli jest wolne miejsce, bierzemy pierwsze z listy birthOptions i tam dodajemy nową żabę
+    if (birthOptions.length > 0) {
+      const newFrogCell = birthOptions[0];
+
+      // Dziedziczenie height
+      const childHeight =
+        motherFrog.height === fatherFrog.height
+          ? motherFrog.height
+          : Math.random() < 0.5
+          ? motherFrog.height
+          : fatherFrog.height;
+
+      // Dziedziczenie thickness
+      const childThickness =
+        motherFrog.thickness === fatherFrog.thickness
+          ? motherFrog.thickness
+          : Math.random() < 0.5
+          ? motherFrog.thickness
+          : fatherFrog.thickness;
+
+      // Aktualizacja stanu żab
+      setCells((oldCells) =>
+        oldCells.map((cell) =>
+          cell.x === newFrogCell.x && cell.y === newFrogCell.y
+            ? {
+                ...cell,
+                frog: {
+                  gender: randomGender,
+                  height: childHeight,
+                  thickness: childThickness,
+                },
+              }
+            : cell
+        )
+      );
+
+      console.log("Nowa żaba w komórce:", newFrogCell);
+    } else {
+      console.log("Brak wolnych miejsc wokół matki");
+    }
+  } else {
+    console.log("Reprodukcja jest możliwa tylko pomiędzy męską a żeńską żabą :)");
+  }
+
+  setSource(null);
+  setTarget(null);
+  setJumpOptions([]);
+};
+
 
   //opcje do skoku
   const getJumpOptions = (cell, rows, cols) => {
@@ -347,10 +418,10 @@ export default function Cell({ rows, cols }) {
                 number={15}
               />
             ) : null}
-            {/* <p>x: {cell.x}</p>
-            <p>y: {cell.y}</p> */}
-            {/* <p>{cell.frog?.gender}</p>
-                <p>{cell.frog?.height}{cell.frog?.thickness}</p> */}
+            <p>x: {cell.x}</p>
+            <p>y: {cell.y}</p> 
+            {/* <p>{cell.frog?.gender}</p> */}
+                {/* <p>{cell.frog?.height}{cell.frog?.thickness}</p> */}
           </div>
         ))}
       </div>
@@ -371,3 +442,6 @@ export default function Cell({ rows, cols }) {
 // wyciągnąć jedną funckję z dwóch tych z options
 //get surrounding positions - zwrócic tablice wspołrzednych , wsp jako argumenty + dystans,
 //osobny komponent dla komórki
+
+
+//!!!!! 172
