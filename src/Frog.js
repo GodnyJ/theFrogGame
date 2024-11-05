@@ -1,12 +1,20 @@
 import React from "react";
 
-export default function Frog() {
+export default function Frog({bodyHeight, bodyWidth, bellyWidth, number}) {
     return (
         <div className='frog-box'>
           
-        <div className='frog'>
+        <div 
+            className='frog'
+            style={{
+                '--body-height':`${bodyHeight}px`,
+                '--body-width':`${bodyWidth}px`,
+                '--belly-width': `${bellyWidth}px`,
+                '--number': `${number}px`
+            }}
+        >
         
-          <div className='body'>
+          <div className='body' style={{height: `var(--body-height)`, width: `var(--body-width)` }}>
             <div className='eyes'>
 
                 <div className='eye left-eye'>
@@ -27,7 +35,7 @@ export default function Frog() {
 
               </div>
 
-            <div className='belly'></div>
+            <div className='belly' style={{width: `var(--belly-width)`}}></div>
           </div>
           <div className='left-leg'></div>
           <div className='right-leg'></div>

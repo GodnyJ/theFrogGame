@@ -10,9 +10,10 @@ function App() {
         <p>Below is a lake with dimensions 10x6 fields. Frogs are marked as green rectangles. Frog with a small blue rectangle is a male; with a purple rectangle female.</p>
       </div>
       <Cell rows={6} cols={10} />
-      <div>
+      <div className='frogs'>
         {/* niska gruba */}
-        <Frog/>
+        {/* <Frog bodyHeight={50} bodyWidth={50} bellyWidth={40} number={5}/>
+        <Frog bodyHeight={65} bodyWidth={30} bellyWidth={20} number={15}/> */}
       </div>
     </div>
   );
