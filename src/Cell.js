@@ -71,8 +71,19 @@ export default function Cell({ rows, cols }) {
   //przechowuje pola do skoku
   const [jumpOptions, setJumpOptions] = useState([]);
 
+  //do przycisków jump i reproduce
   const canJump = source?.frog !== null && target?.frog === null;
   const canReproduce = !!source?.frog && !!target?.frog; // tu zmienić że musi być male i female, mam żabę na jednej i drugiej pozycji
+
+
+
+  const getOptions = (avaliableCells,) => {
+    const options = [];
+
+    options.push(avaliableCells)
+
+
+  }
 
   //opcje do narodzin nowej zaby
   const getBirthOption = (cell, rows, cols) => {
@@ -108,7 +119,9 @@ export default function Cell({ rows, cols }) {
     console.log("Dostępne opcjie narodzin", birthOptions);
     return birthOptions;
   };
-  console.log(canReproduce);
+
+
+  // console.log(canReproduce);
   const handleReproduce = () => {
     if (source === null || target === null) {
       return;
@@ -307,11 +320,35 @@ export default function Cell({ rows, cols }) {
             })}
             onClick={() => handleCellClick(cell)}
           >
-            {cell.frog !== null ? (
+            {cell.frog !== null &&
+            cell.frog.height === "short" &&
+            cell.frog.thickness === "fat" ? (
               <Frog bodyHeight={50} bodyWidth={50} bellyWidth={40} number={5} />
+            ) : cell.frog !== null &&
+              cell.frog.height === "short" &&
+              cell.frog.thickness === "slim" ? (
+              <Frog
+                bodyHeight={50}
+                bodyWidth={24}
+                bellyWidth={18}
+                number={20}
+              />
+            ) : cell.frog !== null &&
+              cell.frog.height === "tall" &&
+              cell.frog.thickness === "fat" ? (
+              <Frog bodyHeight={65} bodyWidth={50} bellyWidth={40} number={5} />
+            ) : cell.frog !== null &&
+              cell.frog.height === "tall" &&
+              cell.frog.thickness === "slim" ? (
+              <Frog
+                bodyHeight={65}
+                bodyWidth={30}
+                bellyWidth={20}
+                number={15}
+              />
             ) : null}
-            <p>x: {cell.x}</p>
-            <p>y: {cell.y}</p>
+            {/* <p>x: {cell.x}</p>
+            <p>y: {cell.y}</p> */}
             {/* <p>{cell.frog?.gender}</p>
                 <p>{cell.frog?.height}{cell.frog?.thickness}</p> */}
           </div>
@@ -333,4 +370,4 @@ export default function Cell({ rows, cols }) {
 // wyłączyć pointer eventy dla żab które są dalej niż 1 od mojej klikniętej żaby
 // wyciągnąć jedną funckję z dwóch tych z options
 //get surrounding positions - zwrócic tablice wspołrzednych , wsp jako argumenty + dystans,
-//osobny komponent dla komórki 
+//osobny komponent dla komórki

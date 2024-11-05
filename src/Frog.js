@@ -37,10 +37,10 @@ export default function Frog({bodyHeight, bodyWidth, bellyWidth, number}) {
 
             <div className='belly' style={{width: `var(--belly-width)`}}></div>
           </div>
-          <div className='left-leg'></div>
-          <div className='right-leg'></div>
-          <div className='left-finger'></div>
-          <div className='right-finger'></div>
+          <div className='left-leg' style={{left: `var(--number)`}}></div>
+          <div className='right-leg' style={{right: `var(--number)`}}></div>
+          <div className='left-finger' style={{left: `var(--number)`}}></div>
+          <div className='right-finger' style={{right: `var(--number)`}}></div>
         </div>
       </div>
     )

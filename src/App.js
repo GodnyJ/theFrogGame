@@ -12,8 +12,10 @@ function App() {
       <Cell rows={6} cols={10} />
       <div className='frogs'>
         {/* niska gruba */}
-        {/* <Frog bodyHeight={50} bodyWidth={50} bellyWidth={40} number={5}/>
-        <Frog bodyHeight={65} bodyWidth={30} bellyWidth={20} number={15}/> */}
+        <Frog bodyHeight={50} bodyWidth={50} bellyWidth={40} number={5}/>
+        <Frog bodyHeight={50} bodyWidth={24} bellyWidth={18} number={20}/>
+        <Frog bodyHeight={65} bodyWidth={30} bellyWidth={20} number={15}/>
+        <Frog bodyHeight={65} bodyWidth={50} bellyWidth={40} number={5}/>
       </div>
     </div>
   );
