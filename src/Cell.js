@@ -17,19 +17,19 @@ const initialFrogs = [
     y: 1,
     frog: {
       gender: "female",
-      height: "tall",
-      thickness: "slim",
+      height: "short",
+      thickness: "fat",
     },
   },
-  {
-    x: 3,
-    y: 1,
-    frog: {
-      gender: "female",
-      height: "tall",
-      thickness: "slim",
-    },
-  },
+//   {
+//     x: 3,
+//     y: 1,
+//     frog: {
+//       gender: "female",
+//       height: "tall",
+//       thickness: "slim",
+//     },
+//   },
 ];
 
 export default function Cell({ rows, cols }) {
@@ -72,7 +72,9 @@ const [cells, setCells] = useState(
   const canJump = source?.frog !== null && target?.frog === null;
   const canReproduce = source?.frog !== null && target?.frog !== null; // tu zmienić że musi być male i female, mam żabę na jednej i drugiej pozycji
 
-//opcje do narodzin nowej zaby
+
+
+//opcje do narodzin nowej zaby 
   const getBirthOption = (cell, rows, cols) => {
     console.log("Wywołanie getBirthOption dla komórki:", cell); 
     const birthOptions = [];
@@ -112,8 +114,16 @@ const [cells, setCells] = useState(
         (source.frog.gender === "female" && target.frog.gender === "male") ||
         (source.frog.gender === "male" && target.frog.gender === "female") 
     ) {
-        //żeńska żaba
+        //określenie komórki
         const motherCell = source.frog.gender === "female" ? source : target;
+        const fatherCell = source.frog.gender === "male" ? source : target;
+
+        //określenie rodziców
+        const motherFrog = motherCell.frog;
+        const fatherFrog = fatherCell.frog;
+
+        //losowanie płci
+        const randomGender = Math.random() < 0.5 ? "male" : "female";
 
         //szukam wolnych miejsc wokół matki
         const birthOptions = getBirthOption(motherCell, rows, cols);
@@ -122,10 +132,28 @@ const [cells, setCells] = useState(
         if (birthOptions.length > 0) {
             const newFrogCell = birthOptions[0]; 
 
+            //dziedziczenie height
+            const childHeight = motherFrog.height === fatherFrog.height
+                ? motherFrog.height //jeśli rodzice mają takie samo height
+                : (Math.random() <0.5 ? motherFrog.height : fatherFrog.height); //jeśli mają różne 
+
+            //dziedziczenie thickness
+            const childThickness = motherFrog.thickness === fatherFrog.thickness
+                ? motherFrog.thickness
+                : (Math.random() < 0.5 ? motherFrog.thickness : fatherFrog.thickness);
+
+            //aktualizacja stanu żab
             setCells((oldCells) => 
                 oldCells.map((cell) => 
                     cell.x === newFrogCell.x && cell.y === newFrogCell.y
-                        ? {...cell, frog: {gender: "female", height: "small", thickness: "slim"}}
+                        ? {
+                            ...cell, 
+                            frog: {
+                                gender: randomGender, 
+                                height: childHeight, 
+                                thickness: childThickness
+                            }
+                        }
                         : cell
                 )
             );
@@ -262,6 +290,9 @@ const setNewCellOfFrog = () => {
             >
                 <p>x: {cell.x}</p>
                 <p>y: {cell.y}</p>
+                {/* <p>{cell.frog?.gender}</p>
+                <p>{cell.frog?.height}{cell.frog?.thickness}</p> */}
+                
             </div>
             ))}
         </div>

@@ -2,37 +2,126 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+/* Stylowanie całej żabki */
+.frog-box{
+  position: relative;
+  margin-left: 50px;
+  width: 80px;
+  height: 80px;
+  background-color: lightblue;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.body {
+position: absolute;
+bottom: 0;
+left: 50%;
+transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  background-color: #00AD25;
+  z-index: 100;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.belly {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 26px;
+  background-color: #0BC032;
+  z-index: 1000;
+  border-radius: 4px;
+}
+
+.eyes {
+  position: absolute;
+  top: -10px;
+  width: 50px;
+  height: 20px;
+  background-color: transparent;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.eye {
+  height: 22px;
+  width: 22px;
+  background-color: #00AD25;
+  border-radius: 50%;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.right-eye__w, .left-eye__w {
+  width: 11px;
+  height: 11px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.right-eye__p, .left-eye__p {
+  width: 8px;
+  height: 8px;
+  background-color: black;
+  border-radius: 50%;
+  
+}
+
+.left-eye__m, .right-eye__m {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: white;
+  z-index: 1000;
+}
+
+.left-leg {
+  position: absolute;
+  bottom: 3px;
+  left: 6px;
+  background-color: #009E22;
+  width: 15px;
+  height: 30px;
+  border-top-right-radius: 200px;
+  border-bottom-left-radius: 200px;
+}
+
+.right-leg {
+  position: absolute;
+  bottom: 3px;
+  right: 6px;
+  background-color: #009E22;
+  width: 15px;
+  height: 30px;
+  border-top-left-radius: 200px;
+  border-bottom-right-radius: 200px;
+}
+
+.left-finger {
+  position: absolute;
+  bottom:0;
+  left: 4px;
+  width: 15px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #009E22;
+}
+
+.right-finger {
+  position: absolute;
+  bottom:0;
+  right: 4px;
+  width: 15px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #009E22;
 }
