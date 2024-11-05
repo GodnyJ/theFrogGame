@@ -29,3 +29,10 @@
     background-color: #C3CED1;
     pointer-events: none;
 }
+
+.displayReproduce {
+    display: inline-block;
+}
+.displayNone {
+    display: none;
+}

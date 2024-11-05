@@ -70,8 +70,80 @@ const [cells, setCells] = useState(
   const [jumpOptions, setJumpOptions] = useState([]);
 
   const canJump = source?.frog !== null && target?.frog === null;
-  const canReproduce = source?.frog !== null && target?.frog !== null; //mam żabę na jednej i drugiej pozycji
+  const canReproduce = source?.frog !== null && target?.frog !== null; // tu zmienić że musi być male i female, mam żabę na jednej i drugiej pozycji
 
+//opcje do narodzin nowej zaby
+  const getBirthOption = (cell, rows, cols) => {
+    console.log("Wywołanie getBirthOption dla komórki:", cell); 
+    const birthOptions = [];
+
+    if (cell.frog && cell.frog.gender === 'female') {
+        console.log('jest kobieta');
+        //sprawdź które komórki o 1 obok mają frog null i dodaj je do tablicy birthOptions
+        //dla female na pozycji x:3y:1 komórki dookoła, które muszę sprawdzić to x4y1, x4y2, x3y2, x2y2, x2y1, x2y0, x3y0, x4y0
+
+        const neighbors = [
+            {x: cell.x +1, y:cell.y}, //prawa
+            {x: cell.x +1, y:cell.y +1}, //prawy dolny
+            {x: cell.x, y:cell.y +1}, //dół
+            {x: cell.x -1, y:cell.y +1}, //lewy dolny
+            {x: cell.x -1, y:cell.y}, //lewy 
+            {x: cell.x -1, y:cell.y -1}, //lewy górny 
+            {x: cell.x, y:cell.y -1}, // górny 
+            {x: cell.x +1, y:cell.y -1}, // prawy górny 
+        ];
+
+        //które są w granicach i maja frog null
+        neighbors.forEach(({x, y}) => {
+            if (x >= 0 && x < cols && y >= 0 && y < rows) {
+                const neighborCell = cells.find(c => c.x === x && c.y === y);
+                if (neighborCell && neighborCell.frog === null) {
+                    birthOptions.push(neighborCell)
+                }
+            }
+        });
+    }
+    console.log('Dostępne opcjie narodzin', birthOptions);
+   return birthOptions;
+  }
+
+  const handleReproduce = () => {
+    if (
+        (source.frog.gender === "female" && target.frog.gender === "male") ||
+        (source.frog.gender === "male" && target.frog.gender === "female") 
+    ) {
+        //żeńska żaba
+        const motherCell = source.frog.gender === "female" ? source : target;
+
+        //szukam wolnych miejsc wokół matki
+        const birthOptions = getBirthOption(motherCell, rows, cols);
+
+        //jeśli jest wolne miejsce, biorę pierwsze z listy i dodaję tam nową żabę
+        if (birthOptions.length > 0) {
+            const newFrogCell = birthOptions[0]; 
+
+            setCells((oldCells) => 
+                oldCells.map((cell) => 
+                    cell.x === newFrogCell.x && cell.y === newFrogCell.y
+                        ? {...cell, frog: {gender: "female", height: "small", thickness: "slim"}}
+                        : cell
+                )
+            );
+
+            console.log("Nowa żaba w komórce:", newFrogCell);
+        } else {
+            console.log("Brak wolnych miejsc wokół matki");
+        }
+    } else {
+        console.log("Reprodukcja jest możliwa tylko pomiędzy męską a żeńską żabą :)");
+    }
+
+    setSource(null);
+    setTarget(null);
+    setJumpOptions([]);
+  }
+
+//opcje do skoku
   const getJumpOptions = (cell, rows, cols) => {
     console.log("Wywołanie getJumpOptions dla komórki:", cell); 
     const options = []; 
@@ -164,6 +236,13 @@ const setNewCellOfFrog = () => {
     setJumpOptions([]);
 }
 
+//reprodukcja 
+//jeśli target jest żabą i source jest żabą to kliknij btn reproduce i dodaj nową żabę 
+//określenie wolnego pola obok matki 
+
+// const avaliableCellNextToMother = 
+
+
 // console.log(cells);
   return (
     <div>
@@ -177,6 +256,7 @@ const setNewCellOfFrog = () => {
                 frog: cell.frog !== null,
                 jumpOption: jumpOptions.some((option) => option.x === cell.x && option.y === cell.y),
                 disabled: source !== null && cell.frog === null && !jumpOptions.some((option) => option.x === cell.x && option.y ===cell.y) && cell !== source,
+
             })}
                 onClick={() => handleCellClick(cell)} 
             >
@@ -187,7 +267,13 @@ const setNewCellOfFrog = () => {
         </div>
         <div>
         <button onClick={setNewCellOfFrog}>Jump</button>
-        <button>Reproduce</button>
+        <button 
+        // className={classNames({
+        //     // displayNone,
+        //     displayReproduce: (target?.frog.gender === 'male' && source?.frog.gender === 'female') || (target?.frog.gender === 'female' && source?.frog.gender === 'male'),
+        // })}
+            onClick={handleReproduce}
+        >Reproduce</button>
         </div>
     </div>
   );
