@@ -9,7 +9,7 @@ function App() {
       <div className='description'>
         <p>Below is a lake with dimensions 10x6 fields. Frogs are marked as green rectangles. Frog with a small blue rectangle is a male; with a purple rectangle female.</p>
       </div>
-      <Grid rows={6} cols={10} />
+      <Grid/>
       <div className='frogs'>
         <Frog height={"tall"} thickness={"fat"}/>
         <Frog height={"tall"} thickness={"slim"}/>

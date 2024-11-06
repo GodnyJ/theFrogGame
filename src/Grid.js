@@ -4,7 +4,10 @@ import "./Grid.css";
 import Cell from "./Cell";
 import Frog from "./Frog";
 
-const 
+const rows = 6;
+const cols = 10;
+
+
 
 const initialFrogs = [
   {
@@ -36,7 +39,7 @@ const initialFrogs = [
   //   },
 ];
 
-export default function Grid({ rows, cols }) {
+export default function Grid() {
   //   const [cells, setCells] = useState(
   //     Array.from({ length: rows * cols }, (_, index) => {
   //         const x = index % cols;
