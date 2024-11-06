@@ -32,38 +32,39 @@ export default function Cell({
             })}
             onClick={() => handleCellClick(cell)}
           >
-            {cell.frog !== null &&
-            cell.frog.height === "short" &&
-            cell.frog.thickness === "fat" ? (
-              <Frog bodyHeight={50} bodyWidth={50} bellyWidth={40} number={5} />
-            ) : cell.frog !== null &&
-              cell.frog.height === "short" &&
-              cell.frog.thickness === "slim" ? (
-              <Frog
-                bodyHeight={50}
-                bodyWidth={24}
-                bellyWidth={18}
-                number={20}
-              />
-            ) : cell.frog !== null &&
-              cell.frog.height === "tall" &&
-              cell.frog.thickness === "fat" ? (
-              <Frog bodyHeight={65} bodyWidth={50} bellyWidth={40} number={5} />
-            ) : cell.frog !== null &&
-              cell.frog.height === "tall" &&
-              cell.frog.thickness === "slim" ? (
-              <Frog
-                bodyHeight={65}
-                bodyWidth={30}
-                bellyWidth={20}
-                number={15}
-              />
-            ) : null}
-            <p>x: {cell.x}</p>
-            <p>y: {cell.y}</p>
+            {cell.frog !== null ?
+              <Frog height={cell.frog.height} thickness={cell.frog.thickness}  gender={cell.frog.gender}/> //gender={cell.frog.gender}
+            : null}
+          
+            {/* <p>x: {cell.x}</p>
+            <p>y: {cell.y}</p> */}
             {/* <p>{cell.frog?.gender}</p> */}
             {/* <p>{cell.frog?.height}{cell.frog?.thickness}</p> */}
           </div>
         
   );
 }
+
+
+//bodyHeight={50} bodyWidth={50} bellyWidth={40} number={5} />
+            // ) : cell.frog !== null &&
+            //   cell.frog.height === "short" &&
+            //   cell.frog.thickness === "slim" ? (
+            //   <Frog
+            //     bodyHeight={50}
+            //     bodyWidth={24}
+            //     bellyWidth={18}
+            //     number={20}
+            //   />
+            // ) : cell.frog !== null &&
+            //   cell.frog.height === "tall" &&
+            //   cell.frog.thickness === "fat" ? (
+            //   <Frog bodyHeight={65} bodyWidth={50} bellyWidth={40} number={5} />
+            // ) : cell.frog !== null &&
+            //   cell.frog.height === "tall" &&
+            //   cell.frog.thickness === "slim" ? (
+            //   <Frog
+            //     bodyHeight={65}
+            //     bodyWidth={30}
+            //     bellyWidth={20}
+            //     number={15}

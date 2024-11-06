@@ -4,6 +4,8 @@ import "./Grid.css";
 import Cell from "./Cell";
 import Frog from "./Frog";
 
+const 
+
 const initialFrogs = [
   {
     x: 0,
@@ -349,7 +351,7 @@ export default function Grid({ rows, cols }) {
           setTarget(cell);
           return;
         } else {
-          // console.log("Kliknięto inną komórkę z żabą")
+          // console.log("Kliknięto inną komórkę z żabą") 
           setTarget(cell);
           return;
         }
@@ -383,13 +385,7 @@ export default function Grid({ rows, cols }) {
     setJumpOptions([]);
   };
 
-  //reprodukcja
-  //jeśli target jest żabą i source jest żabą to kliknij btn reproduce i dodaj nową żabę
-  //określenie wolnego pola obok matki
 
-  // const avaliableCellNextToMother =
-
-  // console.log(cells);
 
   //animacja serca
   const [isHeartAnimation, setIsHeartAnimation] = useState(false);
@@ -410,8 +406,7 @@ export default function Grid({ rows, cols }) {
           style={{
             top: `${heartPosition.top + 20}px`,
             left: `${heartPosition.left + 20}px`,
-            position: "absolute",
-            // transform: 'translate(-80%, -50%)',
+            
           }}
         ></div>
 
