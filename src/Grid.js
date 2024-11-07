@@ -108,7 +108,7 @@ export default function Grid() {
     );
   };
 
-  //get cells for Child Frog
+  //get available cells for Child Frog
   const getBirthOptions = (cell) => {
     if (cell.frog === null) {
       return [];
@@ -157,6 +157,7 @@ export default function Grid() {
       return;
     }
 
+    // if target and source have different gender 
     if ((source.frog.gender === "female" && target.frog.gender === "male") ||
       (source.frog.gender === "male" && target.frog.gender === "female")) {
       
@@ -166,14 +167,18 @@ export default function Grid() {
       const birthOptions = getBirthOptions(motherCell);
       const adjacentFrogs = getAdjacentFrogs(source);
 
-      // I check if target or source is one of the adjacent Frog
+      //I check if target or source is one of the adjacent Frog
       const isTargetAdjacent = adjacentFrogs.some(
         (frogCell) =>
           (frogCell.x === target.x && frogCell.y === target.y) ||
           (frogCell.x === source.x && frogCell.y === source.y)
       );
 
+      //If neither target nor source is adjacent, reset selection and show a message
       if (!isTargetAdjacent) {
+        setSource(null);
+        setTarget(null);
+        setMessage("If you want to reproduce Frogs, they should be next to each other")
         return;
       }
 
@@ -230,7 +235,7 @@ export default function Grid() {
     const centerX = (source.x + target.x) / 2;
     const centerY = (source.y + target.y) / 2;
 
-    // change for px
+    // change - px
     setHeartPosition({
       top: centerY * 80,
       left: centerX * 80,
@@ -244,49 +249,60 @@ export default function Grid() {
 
   const handleCellClick = (cell) => {
     // console.log("Kliknięto na komórkę:", cell);
-
+    
+    //if source is empty 
     if (source === null) {
+
+      //if this field is not a frog do nothing
       if (cell.frog === null) {
-        console.log("Kliknięto pustą komórkę, musisz kliknąć żabę");
         return;
       }
 
+      //set this cell as the source 
       setSource(cell);
+      
+      //get jump options for this clicked field
       const availableJumps = getJumpOptions(cell);
       setJumpOptions(availableJumps);
-      console.log("Dostępne skoki po kliknięciu na żabę:", availableJumps);
-
-      // const oppositeGender = getAdjacentFrogs(cell).filter((frog) => frog.gender !== cell.frog.gender);
-      // console.log("oppositeGender", oppositeGender);
       return;
+
+      //if the source is not empty
     } else {
+
+      //if the source and the clicked cell is the same cell
       if (source === cell) {
+
+        //deselected source
         setSource(null);
         setTarget(null);
         setJumpOptions([]);
         return;
       }
+
+      //set target
       if (target === null) {
         setTarget(cell);
         return;
       }
     }
   };
-  console.log({ source });
-  console.log({ target });
 
   //nowa pozycja żaby
-  const setNewCellOfFrog = () => {
+  const handleJump = () => {
     if (source === null || target === null) {
       return;
     }
+
+    // Update the state of the cells after moving the frog
     setCells((oldCells) =>
       oldCells.map((cell) => {
-        //jeśli komórka jest źródłem (source) to ustawiam ją jako pustą
+
+        // If the cell is the source, clear the frog from it
         if (cell.x === source?.x && cell.y === source?.y) {
           return { ...cell, frog: null };
         }
-        //jeśli komórka jest celem (target) to przenoszę do niej żabę i ustawiam nowe współrzędne
+
+        //If the cell is the target, move the frog to it and update its coordinates
         if (cell.x === target?.x && cell.y === target?.y) {
           return { ...cell, frog: source?.frog, x: target.x, y: target.y };
         }
@@ -301,7 +317,7 @@ export default function Grid() {
 
   return (
     <div>
-      <div className="siatkaTest">
+      <div className="grid">
         <div
           className={`heart ${isHeartAnimation ? "animate" : ""}`}
           style={{
@@ -323,19 +339,13 @@ export default function Grid() {
       </div>
       <p>{message}</p>
       <div>
-        <button disabled={!canJump} onClick={setNewCellOfFrog}>
+        <button className="btn" disabled={!canJump} onClick={handleJump}>
           Jump
         </button>
-        <button disabled={!canReproduce} onClick={handleReproduce}>
+        <button className="btn" disabled={!canReproduce} onClick={handleReproduce}>
           Reproduce
         </button>
       </div>
     </div>
   );
 }
-
-//ostylować buttony
-//dokończyć zmianę języka komentarzy
-//ustawić ikonę i tytuł strony
-//dopisac legendę i opis gry
-//policzki dla żaby w legendzie 

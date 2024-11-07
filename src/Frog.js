@@ -34,7 +34,7 @@ const frogTypes = {
 export default function Frog({ height, thickness, gender }) {
   const { bodyHeight, bodyWidth, bellyWidth, number } =
     frogTypes[height][thickness];
-  // const { gender } = frogTypes[gender];
+
   return (
     <div className="frog-box">
       <div

@@ -1,4 +1,4 @@
-.siatkaTest {
+.grid {
   position: relative;
   display: grid;
   grid-template-columns: repeat(10, 80px);
@@ -8,7 +8,6 @@
 }
 
 /* heart */
-
 .heart {
   position: absolute;
   width: 25px;
@@ -38,7 +37,7 @@
   left: 12.5px;
 }
 
-/* Animacja */
+/* Animation */
 @keyframes flyUp {
   0% {
     transform: translateY(0) rotate(-45deg);
@@ -54,4 +53,30 @@
   visibility: visible;
   opacity: 1;
   animation: flyUp 3s ease-out;
+}
+
+.btn {
+  padding: 10px 20px;
+  margin-left: 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.btn:disabled,
+.btn[disabled] {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
 }
