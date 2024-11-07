@@ -1,4 +1,6 @@
 # The Frog Game
+![image 20](https://github.com/user-attachments/assets/6806c172-db0a-4fc2-ae18-3db30444917a)
+
 
 ## Installation
 
